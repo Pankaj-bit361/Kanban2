@@ -29,9 +29,9 @@ const Card = ({ data, setData, name, back }) => {
 
     return (
         <div>
-            <Box h={'80vh'} bg={'white'}>
+            <Box h={'80vh'} boxShadow={'rgba(0, 0, 0, 0.16) 0px 1px 4px, rgb(51, 51, 51) 0px 0px 0px 3px;'} bg={'white'}>
                 <Box bg={back}>
-                    <Text textAlign={'center'} p={'1%'} fontFamily={'inter'} fontWeight={700} fontSize={'1.5vw'}>{name}</Text>
+                    <Text textAlign={'center'} p={'1%'} fontFamily={'inter'} fontWeight={700} fontSize={['5vw','3vw','2vw','1.5vw']}>{name}</Text>
                 </Box>
                 <Box h={'59vh'} overflowX={'hidden'}>
                     {data && data.map((item, index) => (
@@ -54,7 +54,7 @@ const Card = ({ data, setData, name, back }) => {
                                             color={'black'}
                                             fontWeight={500}
                                             fontFamily={'inter'}
-                                            fontSize={'1.1vw'}
+                                            fontSize={['3vw','2vw','1.5vw','1.1vw']}
                                         >
                                             {item.title}
                                         </Text>

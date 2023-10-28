@@ -79,10 +79,10 @@ function App() {
     setReviewData(items)
   }
   return (
-    <Box className="App" bg={'#008299'}>
+    <Box className="App" >
       <Box w={'100%'} height={'100vh'} pt={'5%'}>
         <Box w={"90%"} m={'auto'} height={'80vh'}>
-          <SimpleGrid columns={4} gap={2}>
+          <SimpleGrid columns={[1,2,3,4]} gap={2}>
             <DragDropContext onDragEnd={handleChangeBacklog}>
               <Droppable droppableId='droppable1'>
                 {(provided, snapshot) => (
