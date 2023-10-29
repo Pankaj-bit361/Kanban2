@@ -15,76 +15,53 @@ function App() {
   const [getDoingData, setDoingData] = useState(dummyDoingData)
   const [getReviewData, setReviewData] = useState(dummyReviewData)
   const [getDoneData, setDoneData] = useState(dummyDoneData)
-  const toast = useToast()
 
   const handleChangeBacklog = (result) => {
+    console.log(result)
     if (!result.destination) {
-      toast({
-        title: `This functionality wil; be soon available`,
-        position: 'center',
-        isClosable: true,
-      })
       return
     }
-    const items = Array.from(getbacklogData);
-    const [reorderedItem] = items.splice(result.source.index, 1)
-    items.splice(result.destination.index, 0, reorderedItem);
-    console.log(items)
-    setBacklogData(items)
-  }
-  const handleChangeDoing = (result) => {
-    if (!result.destination) {
-      toast({
-        title: `This functionality wil; be soon available`,
-        position: 'center',
-        isClosable: true,
-      })
-      return
-    }
-    const items = Array.from(getDoingData);
-    const [reorderedItem] = items.splice(result.source.index, 1)
-    items.splice(result.destination.index, 0, reorderedItem);
-    console.log(items)
-    setDoingData(items)
-  }
-  const handleChangeDone = (result) => {
-    if (!result.destination) {
-      toast({
-        title: `This functionality wil; be soon available`,
-        position: 'center',
-        isClosable: true,
-      })
-      return
-    }
-    const items = Array.from(getDoneData);
-    const [reorderedItem] = items.splice(result.source.index, 1)
-    items.splice(result.destination.index, 0, reorderedItem);
-    console.log(items)
-    setDoneData(items)
+   const {source,destination} =result
+   const resulted = (
+    source.droppableId === 'backlog' ? getbacklogData
+    : source.droppableId === 'doing' ? getDoingData
+    : source.droppableId === 'review'? getReviewData
+    : getDoneData
+  );
+  const resultedDestination=(
+    destination.droppableId === 'backlog' ? getbacklogData
+    : destination.droppableId === 'doing' ? getDoingData
+    : destination.droppableId === 'review'? getReviewData
+    : getDoneData
+  )
+   if(source.droppableId===destination.droppableId){
+    const [reorderedItem] = resulted.splice(result.source.index, 1);
+    resulted.splice(result.destination.index, 0, reorderedItem);
+    source.droppableId === 'backlog' ? setBacklogData(resulted)
+    : source.droppableId === 'doing'?setDoingData(resulted):source.droppableId === 'review' ? setReviewData(resulted)
+    : setDoneData(resulted);  
+   }else {
+    const [reorderedItem] = resulted.splice(result.source.index, 1);
+    source.droppableId === 'backlog' ? setBacklogData(resulted)
+    : source.droppableId === 'doing'?setDoingData(resulted):source.droppableId === 'review' ? setReviewData(resulted)
+    : setDoneData(resulted);  
+    resultedDestination.splice(result.destination.index,0,reorderedItem)
+    destination.droppableId === 'backlog' ? setBacklogData(resultedDestination)
+    : destination.droppableId === 'doing'?setDoingData(resultedDestination):destination.droppableId === 'review' ? setReviewData(resultedDestination)
+    : setDoneData(resultedDestination);  
+
+   }
+    
   }
 
-  const handleChangeReview = (result) => {
-    if (!result.destination) {
-      toast({
-        title: `This functionality wil; be soon available`,
-        position: 'center',
-        isClosable: true,
-      })
-      return
-    }
-    const items = Array.from(getReviewData);
-    const [reorderedItem] = items.splice(result.source.index, 1)
-    items.splice(result.destination.index, 0, reorderedItem);
-    console.log(items)
-    setReviewData(items)
-  }
+
   return (
     <Box className="App" >
       <Box w={'100%'} height={'100vh'} pt={'5%'}>
         <Box w={"90%"} m={'auto'} height={'80vh'}>
-          <SimpleGrid columns={[1,2,3,4]} gap={2}>
-            <DragDropContext onDragEnd={handleChangeBacklog}>
-              <Droppable droppableId='droppable1'>
+          <DragDropContext onDragEnd={handleChangeBacklog}>
+            <SimpleGrid columns={[1, 2, 3, 4]} gap={2}>
+              <Droppable droppableId='backlog'>
                 {(provided, snapshot) => (
                   <div className='characters1' {...provided.droppableProps} ref={provided.innerRef}>
                     <Card name={"Backlog"} data={getbacklogData} setData={setBacklogData} back={'#ed8492'} />
@@ -93,28 +70,23 @@ function App() {
 
                 )}
               </Droppable>
-            </DragDropContext>
-            <DragDropContext onDragEnd={handleChangeDoing}>
-              <Droppable droppableId='droppable2'>
+              <Droppable droppableId='doing'>
                 {(provided, snapshot) => (
                   <div className='characters2' {...provided.droppableProps} ref={provided.innerRef}>
-
                     <Card name={"Doing"} data={getDoingData} setData={setDoingData} back={"#f5e688"} />
+                    {provided.placeholder}
                   </div>
                 )}
               </Droppable>
-            </DragDropContext>
-            <DragDropContext onDragEnd={handleChangeReview}>
-              <Droppable droppableId='droppable3'>
+              <Droppable droppableId='review'>
                 {(provided, snapshot) => (
                   <div className='characters3' {...provided.droppableProps} ref={provided.innerRef}>
                     <Card name={'Review'} data={getReviewData} setData={setReviewData} back={'#88f48e'} />
+                    {provided.placeholder}
                   </div>
                 )}
               </Droppable>
-            </DragDropContext>
-            <DragDropContext onDragEnd={handleChangeDone}>
-              <Droppable droppableId='droppable4'>
+              <Droppable droppableId='done'>
                 {(provided, snapshot) => (
                   <div className='characters4' {...provided.droppableProps} ref={provided.innerRef}>
                     <Card name={'Done'} data={getDoneData} setData={setDoneData} back={'#158cf7'} />
@@ -124,10 +96,8 @@ function App() {
 
                 )}
               </Droppable>
-            </DragDropContext>
-
-          </SimpleGrid>
-
+            </SimpleGrid>
+          </DragDropContext>
         </Box>
       </Box>
 
